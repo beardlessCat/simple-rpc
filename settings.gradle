@@ -1,0 +1,4 @@
+rootProject.name = 'simple-rpc'
+include 'consumer'
+include 'provider'
+

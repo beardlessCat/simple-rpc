@@ -1,0 +1,16 @@
+plugins {
+    id 'java'
+}
+
+group 'com.bigyj'
+version '1.0.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+}
+
+test {
+}

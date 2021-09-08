@@ -15,6 +15,7 @@ dependencies {
     implementation libraries.netty
     implementation libraries.curator
     implementation libraries.springBootStarterWeb
+    implementation libraries.fastjson
 
 }
 

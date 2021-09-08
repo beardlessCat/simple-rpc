@@ -1,5 +1,6 @@
 package com.provider.client;
 
+import com.common.entity.RpcRequest;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.EventLoopGroup;
@@ -44,7 +45,7 @@ public class ConsumerClient {
         eventLoopGroup.shutdownGracefully();
     }
 
-    public void send(String msg) {
+    public void send(RpcRequest msg) {
         this.channel.writeAndFlush(msg);
     }
 }

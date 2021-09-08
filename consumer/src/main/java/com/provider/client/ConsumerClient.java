@@ -1,0 +1,44 @@
+package com.provider.client;
+
+import io.netty.bootstrap.Bootstrap;
+import io.netty.channel.Channel;
+import io.netty.channel.EventLoopGroup;
+import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.nio.NioSocketChannel;
+import lombok.extern.slf4j.Slf4j;
+
+import javax.annotation.PreDestroy;
+@Slf4j
+public class ConsumerClient {
+    private EventLoopGroup eventLoopGroup;
+    private Bootstrap bootstrap ;
+
+    public Channel startClient(){
+        Channel channel = null;
+        String hosts ="" ;
+        int port= 1000 ;
+        try {
+            bootstrap = new Bootstrap();
+            eventLoopGroup = new NioEventLoopGroup(1);
+            bootstrap.group(eventLoopGroup)
+                    .channel(NioSocketChannel.class)
+                    .handler(null);
+            channel = bootstrap.connect(hosts, port).sync().channel();
+            return channel ;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return channel;
+    }
+
+    @PreDestroy
+    public void destroy(){
+        logger.info("RPC客户端退出,释放资源!");
+        close();
+    }
+
+    public void close() {
+        eventLoopGroup.shutdownGracefully();
+    }
+
+}

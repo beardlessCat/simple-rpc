@@ -1,5 +1,6 @@
 package com.provider.server;
 
+import com.provider.handler.ServerHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.EventLoopGroup;
@@ -8,23 +9,28 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.net.InetSocketAddress;
 
 @Slf4j
+@Component
 public class ProviderServer {
+    @Value("${provider.port}")
     private int PORT ;
     private EventLoopGroup bossGroup ;
 
     private EventLoopGroup workerGroup ;
-    public void startImServer() {
+
+    public void startServer() {
         bossGroup = new NioEventLoopGroup();
         workerGroup = new NioEventLoopGroup();
         ServerBootstrap serverBootstrap = new ServerBootstrap();
         try {
             serverBootstrap.group(bossGroup, workerGroup)
                     .channel(NioServerSocketChannel.class)
-                    .childHandler(null)
+                    .childHandler(new ServerHandler())
                     .localAddress(new InetSocketAddress(PORT));
             ChannelFuture channelFuture = serverBootstrap.bind().sync();
             logger.info(
@@ -41,10 +47,7 @@ public class ProviderServer {
                     }
                 }
             });
-            // 7 监听通道关闭事件
-            // 应用程序会一直等待，直到channel关闭
-            ChannelFuture closeFuture =
-                    channelFuture.channel().closeFuture();
+            ChannelFuture closeFuture = channelFuture.channel().closeFuture();
             closeFuture.sync();
         } catch (Exception e) {
             e.printStackTrace();

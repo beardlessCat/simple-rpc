@@ -114,15 +114,6 @@ public class ClientBeanDefinitionRegistrar implements ImportBeanDefinitionRegist
         BeanDefinitionReaderUtils.registerBeanDefinition(holder, registry);
     }
 
-
-    private String resolve(String value) {
-        if (StringUtils.hasText(value)) {
-            return this.environment.resolvePlaceholders(value);
-        }
-        return value;
-    }
-
-
     /**
      * 获取包扫描路径
      * @param importingClassMetadata

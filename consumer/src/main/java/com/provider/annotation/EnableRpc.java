@@ -1,11 +1,18 @@
 package com.provider.annotation;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import com.provider.config.ClientBeanDefinitionRegistrar;
+import org.springframework.context.annotation.Import;
 
-@Target({ElementType.TYPE})
+import java.lang.annotation.*;
+
+@Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
+@Documented
+@Import({ ClientBeanDefinitionRegistrar.class})
 public @interface EnableRpc {
+    /**
+     * 客户端扫描根路径
+     * @return
+     */
+    String[] basePackages() default {};
 }

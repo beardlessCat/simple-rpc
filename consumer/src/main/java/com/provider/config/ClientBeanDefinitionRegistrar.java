@@ -106,21 +106,14 @@ public class ClientBeanDefinitionRegistrar implements ImportBeanDefinitionRegist
     private void registClientBean(Map<String, Object> attributes,String className,BeanDefinitionRegistry registry) {
         BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(InvokeClientFactoryBean.class);
         builder.addPropertyValue("type", className);
-        builder.addPropertyValue("path", getPath(attributes));
-        builder.addPropertyValue("name", getClientName(attributes));
-
         builder.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE);
         AbstractBeanDefinition beanDefinition = builder.getBeanDefinition();
         beanDefinition.setPrimary(true);
-        String alias = "InvokeClient" + className.substring(className.lastIndexOf(".") + 1);
+        String alias = "rpcClient" + className.substring(className.lastIndexOf(".") + 1);
         BeanDefinitionHolder holder = new BeanDefinitionHolder(beanDefinition, className, new String[]{alias});
         BeanDefinitionReaderUtils.registerBeanDefinition(holder, registry);
     }
 
-    private String getPath(Map<String, Object> attributes) {
-        String path = resolve((String) attributes.get("path"));
-        return getPath(path);
-    }
 
     private String resolve(String value) {
         if (StringUtils.hasText(value)) {
@@ -129,18 +122,6 @@ public class ClientBeanDefinitionRegistrar implements ImportBeanDefinitionRegist
         return value;
     }
 
-    static String getPath(String path) {
-        if (StringUtils.hasText(path)) {
-            path = path.trim();
-            if (!path.startsWith("/")) {
-                path = "/" + path;
-            }
-            if (path.endsWith("/")) {
-                path = path.substring(0, path.length() - 1);
-            }
-        }
-        return path;
-    }
 
     /**
      * 获取包扫描路径

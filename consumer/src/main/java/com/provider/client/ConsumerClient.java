@@ -10,10 +10,14 @@ import lombok.extern.slf4j.Slf4j;
 import javax.annotation.PreDestroy;
 @Slf4j
 public class ConsumerClient {
+    private static final ConsumerClient instance = new ConsumerClient() ;
+    public static ConsumerClient getInstance(){
+        return instance;
+    }
     private EventLoopGroup eventLoopGroup;
     private Bootstrap bootstrap ;
-
-    public Channel startClient(){
+    private Channel channel ;
+    public void startClient(){
         Channel channel = null;
         String hosts ="" ;
         int port= 1000 ;
@@ -24,11 +28,10 @@ public class ConsumerClient {
                     .channel(NioSocketChannel.class)
                     .handler(null);
             channel = bootstrap.connect(hosts, port).sync().channel();
-            return channel ;
+            this.channel =  channel ;
         }catch (Exception e){
             e.printStackTrace();
         }
-        return channel;
     }
 
     @PreDestroy
@@ -41,4 +44,7 @@ public class ConsumerClient {
         eventLoopGroup.shutdownGracefully();
     }
 
+    public void send(String msg) {
+        this.channel.writeAndFlush(msg);
+    }
 }

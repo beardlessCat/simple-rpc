@@ -18,10 +18,6 @@ public class InvokeClientFactoryBean implements FactoryBean<Object>, Application
 	private ApplicationContext applicationContext ;
 	@Setter
 	private Class<?> type;
-	@Setter
-	private String path;
-	@Setter
-	private String name ;
 	/**
 	 * 生成代理对象
 	 * @return
@@ -30,6 +26,7 @@ public class InvokeClientFactoryBean implements FactoryBean<Object>, Application
 	@Override
 	public Object getObject() {
 		MethodHandlerFactory methodHandlerFactory = applicationContext.getBean(MethodHandlerFactory.class);
+		methodHandlerFactory.setType(type);
 		Map<Method, MethodHandler> dispatch = new ConcurrentHashMap<>();
 		for (Method method : type.getMethods()) {
 			//通过method的注解信息，获取远程调用的信息

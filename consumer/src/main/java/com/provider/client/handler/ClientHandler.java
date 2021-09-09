@@ -16,9 +16,14 @@ import java.net.InetSocketAddress;
 public class ClientHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelActive(ChannelHandlerContext ctx)   {
-        ctx.pipeline().addBefore("clientHandler","heartBeat",new HeartBeatClientHandler());
         logger.info("已连接到RPC服务器.{}",ctx.channel().remoteAddress());
     }
+
+    @Override
+    public void handlerAdded(ChannelHandlerContext ctx) throws Exception {
+        ctx.pipeline().addBefore("clientHandler","heartBeat",new HeartBeatClientHandler());
+    }
+
     @Override
     public void channelInactive(ChannelHandlerContext ctx)   {
         InetSocketAddress address =(InetSocketAddress) ctx.channel().remoteAddress();

@@ -1,5 +1,6 @@
 package com.provider.server.handler;
 
+import com.alibaba.fastjson.JSON;
 import com.common.entity.RpcRequest;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
@@ -20,7 +21,7 @@ public class HeartBeatServerHandler extends IdleStateHandler {
 
     public void channelRead(ChannelHandlerContext ctx, Object msg)
             throws Exception {
-        RpcRequest request = (RpcRequest) msg;
+        RpcRequest request = JSON.parseObject(msg.toString(),RpcRequest.class);
         //判断消息实例
         if (null == request || request.getRequestType()!=RpcRequest.RequestType.HEATBEAT) {
             super.channelRead(ctx, msg);

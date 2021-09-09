@@ -1,4 +1,4 @@
-package com.provider.server.handler;
+package com.provider.handler;
 
 import com.provider.holder.ServiceHolder;
 import io.netty.channel.ChannelHandler;

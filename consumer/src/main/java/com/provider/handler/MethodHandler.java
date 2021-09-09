@@ -1,4 +1,4 @@
-package com.provider.server.handler;
+package com.provider.handler;
 
 public interface MethodHandler {
     Object invoke(Object[] args) throws Throwable;

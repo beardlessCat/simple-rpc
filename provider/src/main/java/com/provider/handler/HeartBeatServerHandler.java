@@ -1,4 +1,4 @@
-package com.provider.server.handler;
+package com.provider.handler;
 
 import com.common.entity.RpcRequest;
 import io.netty.channel.ChannelHandler;

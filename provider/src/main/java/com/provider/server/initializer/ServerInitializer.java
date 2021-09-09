@@ -1,6 +1,6 @@
 package com.provider.server.initializer;
 
-import com.provider.server.handler.ServerHandler;
+import com.provider.handler.ServerHandler;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;

@@ -2,6 +2,7 @@ package com.provider.client;
 
 import com.common.entity.RpcRequest;
 import com.common.entity.ServerNode;
+import com.provider.holder.ConnectedHolder;
 import com.provider.load.balance.LoadBalance;
 import com.provider.zk.ZkService;
 import io.netty.bootstrap.Bootstrap;
@@ -49,6 +50,7 @@ public class ConsumerClient {
             channel = bootstrap.connect(host, port).sync().channel();
             this.channel =  channel ;
             //管理channel
+            ConnectedHolder.getInstance().init(channel);
         }catch (Exception e){
             e.printStackTrace();
         }

@@ -25,6 +25,8 @@ public class ProviderServer {
     private int PORT ;
     @Autowired
     private ZkService zkService ;
+    @Autowired
+    private ServerInitializer serverInitializer ;
     private EventLoopGroup bossGroup ;
     private EventLoopGroup workerGroup ;
     private static final String MANAGE_PATH ="/im/nodes";
@@ -36,7 +38,7 @@ public class ProviderServer {
         try {
             serverBootstrap.group(bossGroup, workerGroup)
                     .channel(NioServerSocketChannel.class)
-                    .childHandler(new ServerInitializer())
+                    .childHandler(serverInitializer)
                     .localAddress(new InetSocketAddress(PORT));
             ChannelFuture channelFuture = serverBootstrap.bind().sync();
             logger.info(

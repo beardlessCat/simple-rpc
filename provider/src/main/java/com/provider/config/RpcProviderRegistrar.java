@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 import java.util.Map;
 @Slf4j
 @Component
-public class RpcBeanDefinitionRegistrar implements ApplicationContextAware, InitializingBean {
+public class RpcProviderRegistrar implements ApplicationContextAware, InitializingBean {
     private ApplicationContext applicationContext ;
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -37,7 +37,7 @@ public class RpcBeanDefinitionRegistrar implements ApplicationContextAware, Init
             for (Class<?> inter : interfaces){
                 String interfaceName = inter.getName();
                 logger.info("加载服务类: {}", interfaceName);
-                ServiceHolder.serviceMap.put(interfaceName, serviceBean);
+                ServiceHolder.addService(interfaceName, serviceBean);
             }
         }
         logger.info("已加载全部服务接口:{}", ServiceHolder.serviceMap);

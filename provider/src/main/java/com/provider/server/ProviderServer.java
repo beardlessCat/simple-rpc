@@ -1,6 +1,9 @@
 package com.provider.server;
 
+import com.common.entity.ServerNode;
+import com.common.utils.NodeUtil;
 import com.provider.handler.ServerHandler;
+import com.provider.zk.ZkService;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.EventLoopGroup;
@@ -9,9 +12,9 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-
 import java.net.InetSocketAddress;
 
 @Slf4j
@@ -19,10 +22,12 @@ import java.net.InetSocketAddress;
 public class ProviderServer {
     @Value("${provider.port}")
     private int PORT ;
+    @Autowired
+    private ZkService zkService ;
     private EventLoopGroup bossGroup ;
-
     private EventLoopGroup workerGroup ;
-
+    private static final String MANAGE_PATH ="/im/nodes";
+    public static final String PATH_PREFIX = MANAGE_PATH + "/seq-";
     public void startServer() {
         bossGroup = new NioEventLoopGroup();
         workerGroup = new NioEventLoopGroup();
@@ -42,6 +47,15 @@ public class ProviderServer {
                     if (future.isSuccess()) {
                         logger.error("服务端启动成功");
                         //注册到zookeeper
+                        //判断根节点是否存在
+                        if (zkService.checkNodeExists(MANAGE_PATH)) {
+                            zkService.createPersistentNode(MANAGE_PATH);
+                        }
+                        ServerNode serverNode = new ServerNode("127.0.0.1",PORT);
+                        String pathRegistered =  zkService.createNode(PATH_PREFIX, serverNode);
+                        //为node 设置id
+                        serverNode.setId(NodeUtil.getIdByPath(pathRegistered,PATH_PREFIX));
+                        logger.info("zk注册成功, path={}, id={}", pathRegistered, serverNode.getId());
                     } else {
                         logger.error("服务端启动成失败");
                     }

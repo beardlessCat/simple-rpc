@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class TestControler {
     @Autowired
     private UserService userService ;
+
     @RequestMapping("/getUser")
     private void getUser(){
         userService.getUser("1","1");

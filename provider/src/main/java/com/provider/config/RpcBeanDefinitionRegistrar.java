@@ -8,19 +8,19 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.stereotype.Component;
 
 import java.util.Map;
 @Slf4j
+@Component
 public class RpcBeanDefinitionRegistrar implements ApplicationContextAware, InitializingBean {
     private ApplicationContext applicationContext ;
     @Override
     public void afterPropertiesSet() throws Exception {
         //启动服务器
         ProviderServer server = applicationContext.getBean(ProviderServer.class);
-        //异步启动
-        new Thread(()->{
-            server.startServer();
-        });
+        //服务启动，并注册值zk
+        server.startServer();
     }
 
     @Override

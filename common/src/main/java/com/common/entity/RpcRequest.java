@@ -20,7 +20,10 @@ public class RpcRequest implements Serializable {
         this.requestType = requestType ;
     }
 
-    public RpcRequest(String className, String methodName, Class<?>[] parameterTypes, Object[] parameters,RequestType requestType) {
+    public RpcRequest() {
+    }
+
+    public RpcRequest(String className, String methodName, Class<?>[] parameterTypes, Object[] parameters, RequestType requestType) {
         this.className = className;
         this.methodName = methodName;
         this.parameterTypes = parameterTypes;

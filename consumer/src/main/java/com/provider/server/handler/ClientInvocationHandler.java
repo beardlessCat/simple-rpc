@@ -1,4 +1,4 @@
-package com.provider.handler;
+package com.provider.server.handler;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

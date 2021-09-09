@@ -2,7 +2,7 @@ package com.provider.server;
 
 import com.common.entity.ServerNode;
 import com.common.utils.NodeUtil;
-import com.provider.initializer.ServerInitializer;
+import com.provider.server.initializer.ServerInitializer;
 import com.provider.zk.ZkService;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;

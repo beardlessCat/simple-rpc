@@ -1,8 +1,8 @@
 package com.provider.config;
 
 import com.provider.factory.MethodHandlerFactory;
-import com.provider.handler.ClientInvocationHandler;
-import com.provider.handler.MethodHandler;
+import com.provider.server.handler.ClientInvocationHandler;
+import com.provider.server.handler.MethodHandler;
 import lombok.Setter;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.FactoryBean;

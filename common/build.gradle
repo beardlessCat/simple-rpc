@@ -10,6 +10,8 @@ repositories {
 }
 
 dependencies {
+    implementation libraries.netty
+    implementation libraries.fastjson
 }
 
 test {

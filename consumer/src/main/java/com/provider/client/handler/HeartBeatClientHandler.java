@@ -1,7 +1,6 @@
 package com.provider.client.handler;
 
 import com.common.entity.RpcRequest;
-import com.google.gson.Gson;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import lombok.extern.slf4j.Slf4j;
@@ -19,12 +18,12 @@ public class HeartBeatClientHandler extends ChannelInboundHandlerAdapter {
             throws Exception {
         RpcRequest request = new RpcRequest().setRequestType(RpcRequest.RequestType.HEATBEAT);
         //发送心跳
-        heartBeat(ctx, new Gson().toJson(request));
+        heartBeat(ctx,request);
     }
 
     //使用定时器，发送心跳报文
     public void heartBeat(ChannelHandlerContext ctx,
-                          String heartbeatMsg) {
+                          RpcRequest heartbeatMsg) {
         ctx.executor().schedule(() -> {
             if (ctx.channel().isActive()) {
                 //logger.info("ping.......");

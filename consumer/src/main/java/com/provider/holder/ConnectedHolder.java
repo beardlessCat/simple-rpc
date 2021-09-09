@@ -1,5 +1,6 @@
 package com.provider.holder;
 
+import com.common.entity.RpcRequest;
 import io.netty.channel.Channel;
 
 public class ConnectedHolder {
@@ -13,7 +14,7 @@ public class ConnectedHolder {
         this.channel = channel ;
     }
 
-    public void send(Object request){
+    public void send(RpcRequest request){
         channel.writeAndFlush(request);
     }
 }

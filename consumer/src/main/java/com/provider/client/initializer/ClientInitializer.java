@@ -1,20 +1,19 @@
-package com.provider.server.initializer;
+package com.provider.client.initializer;
 
 import com.common.codedc.JSONDecoder;
 import com.common.codedc.JSONEncoder;
-import com.provider.server.handler.ServerHandler;
+import com.provider.client.handler.ClientHandler;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
-import org.springframework.stereotype.Component;
 
-@Component
-public class ServerInitializer extends ChannelInitializer<SocketChannel> {
+public class ClientInitializer extends ChannelInitializer<SocketChannel> {
     @Override
     protected void initChannel(SocketChannel ch) throws Exception {
         ChannelPipeline pipeline = ch.pipeline();
         pipeline.addLast(new JSONEncoder());
         pipeline.addLast(new JSONDecoder());
-        pipeline.addLast("serverHandler",new ServerHandler());
+        pipeline.addLast("clientHandler",new ClientHandler());
     }
+
 }

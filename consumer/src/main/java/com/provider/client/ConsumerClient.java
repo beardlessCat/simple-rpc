@@ -2,6 +2,7 @@ package com.provider.client;
 
 import com.common.entity.RpcRequest;
 import com.common.entity.ServerNode;
+import com.provider.client.initializer.ClientInitializer;
 import com.provider.holder.ConnectedHolder;
 import com.provider.load.balance.LoadBalance;
 import com.provider.zk.ZkService;
@@ -46,7 +47,7 @@ public class ConsumerClient {
             eventLoopGroup = new NioEventLoopGroup(1);
             bootstrap.group(eventLoopGroup)
                     .channel(NioSocketChannel.class)
-                    .handler(null);
+                    .handler(new ClientInitializer());
             channel = bootstrap.connect(host, port).sync().channel();
             this.channel =  channel ;
             //管理channel
@@ -64,9 +65,5 @@ public class ConsumerClient {
 
     public void close() {
         eventLoopGroup.shutdownGracefully();
-    }
-
-    public void send(RpcRequest msg) {
-        this.channel.writeAndFlush(msg);
     }
 }

@@ -2,7 +2,7 @@ package com.provider.server;
 
 import com.common.entity.ServerNode;
 import com.common.utils.NodeUtil;
-import com.provider.handler.ServerHandler;
+import com.provider.initializer.ServerInitializer;
 import com.provider.zk.ZkService;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
 import java.net.InetSocketAddress;
 
 @Slf4j
@@ -35,7 +36,7 @@ public class ProviderServer {
         try {
             serverBootstrap.group(bossGroup, workerGroup)
                     .channel(NioServerSocketChannel.class)
-                    .childHandler(new ServerHandler())
+                    .childHandler(new ServerInitializer())
                     .localAddress(new InetSocketAddress(PORT));
             ChannelFuture channelFuture = serverBootstrap.bind().sync();
             logger.info(

@@ -15,6 +15,8 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         logger.info("客户端连接成功!"+ctx.channel().remoteAddress());
+        //将心跳handler加入通道
+        ctx.pipeline().addBefore("serverHandler","heartbeat",new HeartBeatServerHandler());
     }
 
     @Override

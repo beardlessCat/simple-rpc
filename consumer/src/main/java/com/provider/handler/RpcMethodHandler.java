@@ -1,7 +1,8 @@
 package com.provider.handler;
 
-import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.common.entity.RpcRequest;
+import com.common.entity.RpcResponse;
 import com.provider.holder.ConnectedHolder;
 import lombok.extern.slf4j.Slf4j;
 
@@ -19,7 +20,10 @@ public class RpcMethodHandler implements MethodHandler{
                 new RpcRequest(method.getDeclaringClass().getName(),method.getName(), RpcRequest.RequestType.CONTENT);
         //执行远程通讯. 等待消息反馈
         SynchronousQueue<Object> queue = ConnectedHolder.getInstance().send(request);
-        Object result = queue.take();
-        return JSONArray.toJSONString(result);
+        RpcResponse result = (RpcResponse) queue.take();
+        //fixme 处理接口状态
+        Class<?> returnType = method.getReturnType();
+        Object data = result.getData();
+        return JSONObject.parseObject(data.toString(), returnType);
     }
 }

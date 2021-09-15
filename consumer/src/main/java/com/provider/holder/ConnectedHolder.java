@@ -3,6 +3,8 @@ package com.provider.holder;
 import com.common.entity.RpcRequest;
 import io.netty.channel.Channel;
 
+import java.util.concurrent.SynchronousQueue;
+
 public class ConnectedHolder {
     private Channel channel ;
     private static final  ConnectedHolder instance = new ConnectedHolder();
@@ -14,7 +16,10 @@ public class ConnectedHolder {
         this.channel = channel ;
     }
 
-    public void send(RpcRequest request){
+    public SynchronousQueue<Object>  send(RpcRequest request){
+        SynchronousQueue<Object> queue = new SynchronousQueue<>();
+        QueueHolder.addQueue(request.getId(), queue);
         channel.writeAndFlush(request);
+        return queue;
     }
 }

@@ -2,6 +2,7 @@ package com.provider.client.handler;
 
 import com.alibaba.fastjson.JSON;
 import com.common.entity.RpcResponse;
+import com.provider.holder.QueueHolder;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -9,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.net.InetSocketAddress;
+import java.util.concurrent.SynchronousQueue;
 
 @Component
 @ChannelHandler.Sharable
@@ -34,8 +36,10 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg)throws Exception {
         RpcResponse response = JSON.parseObject(msg.toString(), RpcResponse.class);
+        logger.info(response.toString());
         String requestId = response.getRequestId();
-        //处理返回的结果 fixme
+        SynchronousQueue<Object> queue = QueueHolder.getQueue(requestId);
+        queue.put(response);
     }
 
     @Override

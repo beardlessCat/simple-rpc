@@ -16,10 +16,6 @@ public class MethodHandlerFactory {
     }
 
     private MethodHandler buildHandler(Method method) {
-        RpcRequest request = method.getParameterTypes().length>0?
-            new RpcRequest(type.getName(),method.getName(), method.getParameterTypes(),method.getParameters(), RpcRequest.RequestType.CONTENT)
-            :
-            new RpcRequest(type.getName(),method.getName(), RpcRequest.RequestType.CONTENT);
-        return new RpcMethodHandler(request);
+        return new RpcMethodHandler();
     }
 }

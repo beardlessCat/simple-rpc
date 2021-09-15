@@ -14,7 +14,7 @@ public class ClientInvocationHandler implements InvocationHandler {
     Map<Method, MethodHandler> dispatch = new ConcurrentHashMap<>();
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        Object result = dispatch.get(method).invoke(args);
+        Object result = dispatch.get(method).invoke(method,args);
         return result;
     }
 }

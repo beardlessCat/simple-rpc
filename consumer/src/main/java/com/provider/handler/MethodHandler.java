@@ -1,5 +1,7 @@
 package com.provider.handler;
 
+import java.lang.reflect.Method;
+
 public interface MethodHandler {
-    Object invoke(Object[] args) throws Throwable;
+    Object invoke(Method method , Object[] args) throws Throwable;
 }

@@ -1,6 +1,7 @@
 package com.provider.controller;
 
 import com.api.UserService;
+import com.dto.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,8 +13,9 @@ public class TestControler {
     private UserService userService ;
 
     @RequestMapping("/getUser")
-    private void getUser(){
-        userService.getUser("1");
+    private UserDto getUser(){
+        UserDto user = userService.getUser("1");
+        return user;
     }
 
 }

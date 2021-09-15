@@ -21,6 +21,5 @@ public class RpcMethodHandler implements MethodHandler{
         SynchronousQueue<Object> queue = ConnectedHolder.getInstance().send(request);
         Object result = queue.take();
         return JSONArray.toJSONString(result);
-
     }
 }

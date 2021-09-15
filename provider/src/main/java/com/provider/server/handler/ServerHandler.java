@@ -34,7 +34,9 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         //处理远程连接，执行本地方法
         RpcRequest request = JSON.parseObject(msg.toString(),RpcRequest.class);
         Object result = this.handleRequest(request);
-        System.out.printf("", result);
+        logger.info(result.toString());
+        RpcResponse response = new RpcResponse(request.getId(), 200, "请求成功", result);
+        ctx.channel().writeAndFlush(response);
     }
 
     private Object handleRequest(RpcRequest request) throws Exception {

@@ -1,8 +1,10 @@
 package com.common.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
+@AllArgsConstructor
 public class RpcResponse {
     private String requestId;
     private int code;

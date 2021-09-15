@@ -1,8 +1,9 @@
 package com.api;
 
 import com.common.annotation.RpcService;
+import com.dto.UserDto;
 
 @RpcService
 public interface UserService {
-    void getUser(String name ,String id);
+    UserDto getUser(String id);
 }

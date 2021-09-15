@@ -13,7 +13,7 @@ public class TestControler {
 
     @RequestMapping("/getUser")
     private void getUser(){
-        userService.getUser("1","1");
+        userService.getUser("1");
     }
 
 }

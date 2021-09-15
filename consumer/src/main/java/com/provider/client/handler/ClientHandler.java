@@ -40,6 +40,7 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
         String requestId = response.getRequestId();
         SynchronousQueue<Object> queue = QueueHolder.getQueue(requestId);
         queue.put(response);
+        QueueHolder.remove(requestId);
     }
 
     @Override

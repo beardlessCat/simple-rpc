@@ -1,12 +1,9 @@
 package com.provider.holder;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.SynchronousQueue;
 
 public class QueueHolder {
-    public static Map<String, Object> serviceMap = new HashMap<>();
     private static ConcurrentHashMap<String, SynchronousQueue<Object>> queueMap = new ConcurrentHashMap<>();
 
     public static void addQueue(String requestId,SynchronousQueue<Object> objectSynchronousQueue){

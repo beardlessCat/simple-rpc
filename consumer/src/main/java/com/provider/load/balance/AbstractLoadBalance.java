@@ -11,7 +11,7 @@ public abstract class AbstractLoadBalance implements LoadBalance {
 		if(serverNodes.isEmpty()){
 			return null;
 		}
-		return serverNodes.get(0);
+		return doSelect(serverNodes);
 	}
 
 	protected abstract ServerNode doSelect(List<ServerNode> serverNodes);

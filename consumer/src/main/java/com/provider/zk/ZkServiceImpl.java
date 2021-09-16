@@ -3,13 +3,14 @@ package com.provider.zk;
 import com.alibaba.fastjson.JSONObject;
 import com.common.entity.ServerNode;
 import com.common.utils.NodeUtil;
+import com.provider.holder.RemoteServerHolder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.curator.framework.CuratorFramework;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 @Slf4j
 @Component
@@ -18,8 +19,11 @@ public class ZkServiceImpl implements ZkService {
 	CuratorFramework curatorFramework;
 
 	@Override
-	public List<ServerNode> getWorkers(String path, String prefix) {
-		List<ServerNode> workers = new ArrayList<ServerNode>();
+	public CopyOnWriteArrayList<ServerNode> getWorkers(String path, String prefix) {
+		CopyOnWriteArrayList<ServerNode> serverList = RemoteServerHolder.getServerList();
+		if(serverList.isEmpty()){
+			return serverList;
+		}
 		List<String> children = null;
 		try
 		{
@@ -48,8 +52,8 @@ public class ZkServiceImpl implements ZkService {
 			}
 			ServerNode serverNode = JSONObject.parseObject(payload, ServerNode.class);
 			serverNode.setId(NodeUtil.getIdByPath(child,prefix));
-			workers.add(serverNode);
+			RemoteServerHolder.addRemoteServer(serverNode);
 		}
-		return workers;
+		return RemoteServerHolder.getServerList();
 	}
 }

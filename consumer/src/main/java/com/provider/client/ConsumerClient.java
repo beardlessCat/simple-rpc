@@ -1,6 +1,5 @@
 package com.provider.client;
 
-import com.common.entity.RpcRequest;
 import com.common.entity.ServerNode;
 import com.provider.client.initializer.ClientInitializer;
 import com.provider.holder.ConnectedHolder;
@@ -33,11 +32,11 @@ public class ConsumerClient {
     private LoadBalance loadBalance;
     @Autowired
     private ZkService zkService;
-    public static final String MANAGE_PATH = "/im/nodes";
+    public static final String MANAGE_PATH = "/rpc/nodes";
     public static final String PATH_PREFIX_NO_STRIP =  "seq-";
 
     public void startClient(){
-        List<ServerNode> workers = zkService.getWorkers(MANAGE_PATH, PATH_PREFIX_NO_STRIP);
+        List<ServerNode> workers = zkService.getServerNodes(MANAGE_PATH, PATH_PREFIX_NO_STRIP);
         ServerNode serverNode = loadBalance.selectNode(workers);
         Channel channel = null;
         String host =serverNode.getHost() ;

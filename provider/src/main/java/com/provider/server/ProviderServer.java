@@ -29,7 +29,7 @@ public class ProviderServer {
     private ServerInitializer serverInitializer ;
     private EventLoopGroup bossGroup ;
     private EventLoopGroup workerGroup ;
-    private static final String MANAGE_PATH ="/im/nodes";
+    private static final String MANAGE_PATH ="/rpc/nodes";
     public static final String PATH_PREFIX = MANAGE_PATH + "/seq-";
     public void startServer() {
         bossGroup = new NioEventLoopGroup();

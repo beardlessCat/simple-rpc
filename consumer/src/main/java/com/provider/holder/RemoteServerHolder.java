@@ -1,6 +1,7 @@
 package com.provider.holder;
 
 import com.common.entity.ServerNode;
+import org.apache.curator.framework.recipes.cache.ChildData;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -24,5 +25,12 @@ public class RemoteServerHolder {
      */
     public static void addRemoteServer(ServerNode serverNode) {
         serverList.addIfAbsent(serverNode);
+    }
+
+    /**
+     * 清空服务列表
+     */
+    public static void clear() {
+        serverList.clear();
     }
 }

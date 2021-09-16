@@ -19,9 +19,9 @@ public class ZkServiceImpl implements ZkService {
 	CuratorFramework curatorFramework;
 
 	@Override
-	public CopyOnWriteArrayList<ServerNode> getWorkers(String path, String prefix) {
+	public CopyOnWriteArrayList<ServerNode> getServerNodes(String path, String prefix) {
 		CopyOnWriteArrayList<ServerNode> serverList = RemoteServerHolder.getServerList();
-		if(serverList.isEmpty()){
+		if(!serverList.isEmpty()){
 			return serverList;
 		}
 		List<String> children = null;

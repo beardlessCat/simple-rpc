@@ -2,4 +2,5 @@ rootProject.name = 'simple-rpc'
 include 'consumer'
 include 'provider'
 include 'common'
+include 'rpc-spring-boot-starter'
 

@@ -30,3 +30,5 @@ RPC，即 Remote Procedure Call（远程过程调用），调用远程计算机�
 (5)consumer中客户端的注册与动态代理
 (6)本地服务列表
 (7)服务注册监听机制
+(8)客户端请求异步处理的支持，不需要同步等待：发送一个异步请求，返回Feature，通过Feature的callback机制获取结果。
+

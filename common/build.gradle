@@ -12,7 +12,10 @@ repositories {
 dependencies {
     implementation libraries.netty
     implementation libraries.fastjson
+    implementation libraries.kryo
+    implementation libraries.protostuffCore
+    implementation libraries.protostuffRunTime
+    implementation libraries.hessian
 }
-
 test {
 }

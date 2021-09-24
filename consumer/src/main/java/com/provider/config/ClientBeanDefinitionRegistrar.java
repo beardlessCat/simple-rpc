@@ -3,13 +3,14 @@ package com.provider.config;
 
 import com.common.annotation.RpcReference;
 import com.provider.annotation.EnableRpc;
+import org.reflections.Reflections;
+import org.reflections.scanners.FieldAnnotationsScanner;
+import org.reflections.scanners.SubTypesScanner;
+import org.reflections.util.ConfigurationBuilder;
 import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinitionHolder;
-import org.springframework.beans.factory.support.AbstractBeanDefinition;
-import org.springframework.beans.factory.support.BeanDefinitionBuilder;
-import org.springframework.beans.factory.support.BeanDefinitionReaderUtils;
-import org.springframework.beans.factory.support.BeanDefinitionRegistry;
+import org.springframework.beans.factory.support.*;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.context.ResourceLoaderAware;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
@@ -21,6 +22,7 @@ import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
 
+import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -30,22 +32,15 @@ public class ClientBeanDefinitionRegistrar implements ImportBeanDefinitionRegist
     private ResourceLoader resourceLoader;
     @Override
     public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
-        ClassPathScanningCandidateComponentProvider scanner = this.getScanner();
-        scanner.setResourceLoader(resourceLoader);
-        /**
-         * 获取扫描包路径
-         */
         Set<String> basePackages = getBasePackages(importingClassMetadata);
-        AnnotationTypeFilter annotationTypeFilter = new AnnotationTypeFilter(RpcReference.class);
-        scanner.addIncludeFilter(annotationTypeFilter);
-        //循环扫描多个包，进行注入
-        basePackages.stream().forEach(basePackage->{
-            scanner.findCandidateComponents(basePackage).forEach(beanDefinition -> {
-                /**
-                 * 注册客户端信息
-                 */
-                registryClient(beanDefinition,registry);
-            });
+        Reflections reflections = new Reflections(new ConfigurationBuilder()
+                .forPackages("com.provider.controller")
+                .addScanners(new SubTypesScanner())
+                .addScanners(new FieldAnnotationsScanner()));
+        Set<Field> fieldsAnnotatedWith = reflections.getFieldsAnnotatedWith(RpcReference.class);
+        fieldsAnnotatedWith.stream().forEach(field -> {
+            Class<?> type = field.getType();
+            registryClient(type.getName(),registry);
         });
     }
 
@@ -69,41 +64,21 @@ public class ClientBeanDefinitionRegistrar implements ImportBeanDefinitionRegist
 
     /**
      * 注册
-     * @param invokeClient
+     * @param className
      * @param registry
      */
-    private void registryClient(BeanDefinition invokeClient, BeanDefinitionRegistry registry) {
-        if (invokeClient instanceof AnnotatedBeanDefinition) {
-            AnnotationMetadata metadata = ((AnnotatedBeanDefinition) invokeClient).getMetadata();
-            String className = metadata.getClassName();
-            Map<String, Object> attributes = metadata.getAnnotationAttributes(RpcReference.class.getCanonicalName());
-            /**
-             * 注册client
-             */
-            registClientBean(attributes,className,registry);
-        }
+    private void registryClient(String className, BeanDefinitionRegistry registry) {
+        registClientBean(className,registry);
     }
 
-    /**
-     * 获取客户端名称
-     * @return
-     */
-    private String getClientName(Map<String, Object> client) {
-        String value = (String) client.get("name");
-        if (!StringUtils.hasText(value)) {
-            value = (String) client.get("value");
-        }
-        return value ;
-    }
 
 
     /**
      * 注册客户端bean
-     * @param attributes
      * @param className
      * @param registry
      */
-    private void registClientBean(Map<String, Object> attributes,String className,BeanDefinitionRegistry registry) {
+    private void registClientBean(String className,BeanDefinitionRegistry registry) {
         BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(InvokeClientFactoryBean.class);
         builder.addPropertyValue("type", className);
         builder.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE);

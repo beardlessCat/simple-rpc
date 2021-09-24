@@ -5,6 +5,7 @@ import com.common.entity.ServerNode;
 import com.dto.UserDto;
 import com.common.annotation.RpcReference;
 import com.provider.holder.RemoteServerHolder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,6 +16,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class TestControler {
 
     @RpcReference
+    @Autowired
     private UserService userService ;
 
     @RequestMapping("/getUser")

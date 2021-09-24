@@ -1,7 +1,7 @@
 package com.provider.config;
 
 
-import com.common.annotation.RpcService;
+import com.common.annotation.RpcReference;
 import com.provider.annotation.EnableRpc;
 import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinition;
@@ -36,7 +36,7 @@ public class ClientBeanDefinitionRegistrar implements ImportBeanDefinitionRegist
          * 获取扫描包路径
          */
         Set<String> basePackages = getBasePackages(importingClassMetadata);
-        AnnotationTypeFilter annotationTypeFilter = new AnnotationTypeFilter(RpcService.class);
+        AnnotationTypeFilter annotationTypeFilter = new AnnotationTypeFilter(RpcReference.class);
         scanner.addIncludeFilter(annotationTypeFilter);
         //循环扫描多个包，进行注入
         basePackages.stream().forEach(basePackage->{
@@ -76,7 +76,7 @@ public class ClientBeanDefinitionRegistrar implements ImportBeanDefinitionRegist
         if (invokeClient instanceof AnnotatedBeanDefinition) {
             AnnotationMetadata metadata = ((AnnotatedBeanDefinition) invokeClient).getMetadata();
             String className = metadata.getClassName();
-            Map<String, Object> attributes = metadata.getAnnotationAttributes(RpcService.class.getCanonicalName());
+            Map<String, Object> attributes = metadata.getAnnotationAttributes(RpcReference.class.getCanonicalName());
             /**
              * 注册client
              */

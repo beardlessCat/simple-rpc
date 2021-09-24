@@ -16,7 +16,7 @@ dependencies {
     implementation libraries.curator
     implementation libraries.springBootStarterWeb
     implementation libraries.fastjson
-
+    implementation libraries.reflections
 }
 
 test {

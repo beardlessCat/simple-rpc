@@ -8,7 +8,6 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Field;
-@Component
 public class RpcReferenceAnnotationBeanPostProcessor implements BeanPostProcessor , ApplicationContextAware {
     private ApplicationContext applicationContext ;
     @Override

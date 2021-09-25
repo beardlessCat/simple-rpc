@@ -16,7 +16,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class TestControler {
 
     @RpcReference
-    @Autowired
     private UserService userService ;
 
     @RequestMapping("/getUser")

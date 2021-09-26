@@ -105,11 +105,9 @@ public class ClientBeanDefinitionRegistrar implements ImportBeanDefinitionRegist
                 basePackages.add(pkg);
             }
         }
-        //若未维护包名，则获取当前启动类所在的目录
-        if (basePackages.isEmpty()) {
-            basePackages.add(
-                    ClassUtils.getPackageName(importingClassMetadata.getClassName()));
-        }
+        //无论是否维护包名，均获取当前启动类所在的目录
+        basePackages.add(
+            ClassUtils.getPackageName(importingClassMetadata.getClassName()));
         return basePackages;
     }
     @Override

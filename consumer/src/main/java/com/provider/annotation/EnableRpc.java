@@ -1,7 +1,7 @@
 package com.provider.annotation;
 
 import com.provider.config.ClientBeanDefinitionRegistrar;
-import com.provider.config.RpcReferenceAnnotationBeanPostProcessor;
+import com.provider.config.annotation.processor.RpcReferenceAnnotationBeanPostProcessor;
 import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.*;

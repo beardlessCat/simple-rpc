@@ -1,4 +1,4 @@
-package com.provider.config;
+package com.provider.config.annotation.processor;
 
 import com.common.annotation.RpcReference;
 import org.springframework.beans.BeansException;

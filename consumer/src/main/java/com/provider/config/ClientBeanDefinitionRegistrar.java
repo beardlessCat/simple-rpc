@@ -1,6 +1,4 @@
 package com.provider.config;
-
-
 import com.common.annotation.RpcReference;
 import com.provider.annotation.EnableRpc;
 import org.reflections.Reflections;
@@ -8,9 +6,11 @@ import org.reflections.scanners.FieldAnnotationsScanner;
 import org.reflections.scanners.SubTypesScanner;
 import org.reflections.util.ConfigurationBuilder;
 import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
-import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinitionHolder;
-import org.springframework.beans.factory.support.*;
+import org.springframework.beans.factory.support.AbstractBeanDefinition;
+import org.springframework.beans.factory.support.BeanDefinitionBuilder;
+import org.springframework.beans.factory.support.BeanDefinitionReaderUtils;
+import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.context.ResourceLoaderAware;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
@@ -18,7 +18,6 @@ import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.core.type.AnnotationMetadata;
-import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
 
@@ -33,14 +32,16 @@ public class ClientBeanDefinitionRegistrar implements ImportBeanDefinitionRegist
     @Override
     public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
         Set<String> basePackages = getBasePackages(importingClassMetadata);
-        Reflections reflections = new Reflections(new ConfigurationBuilder()
-                .forPackages("com.provider.controller")
-                .addScanners(new SubTypesScanner())
-                .addScanners(new FieldAnnotationsScanner()));
-        Set<Field> fieldsAnnotatedWith = reflections.getFieldsAnnotatedWith(RpcReference.class);
-        fieldsAnnotatedWith.stream().forEach(field -> {
-            Class<?> type = field.getType();
-            registryClient(type.getName(),registry);
+        basePackages.stream().forEach(basePackage->{
+            Reflections reflections = new Reflections(new ConfigurationBuilder()
+                    .forPackages(basePackage)
+                    .addScanners(new SubTypesScanner())
+                    .addScanners(new FieldAnnotationsScanner()));
+            Set<Field> fieldsAnnotatedWith = reflections.getFieldsAnnotatedWith(RpcReference.class);
+            fieldsAnnotatedWith.stream().forEach(field -> {
+                Class<?> type = field.getType();
+                registryClient(type.getName(),registry);
+            });
         });
     }
 

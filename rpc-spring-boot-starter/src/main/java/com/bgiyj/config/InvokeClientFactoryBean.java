@@ -1,8 +1,8 @@
 package com.bgiyj.config;
 
-import com.provider.factory.MethodHandlerFactory;
-import com.provider.handler.ClientInvocationHandler;
-import com.provider.handler.MethodHandler;
+import com.bgiyj.config.handler.ClientInvocationHandler;
+import com.bgiyj.config.handler.MethodHandler;
+import com.bgiyj.factory.MethodHandlerFactory;
 import lombok.Setter;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.FactoryBean;

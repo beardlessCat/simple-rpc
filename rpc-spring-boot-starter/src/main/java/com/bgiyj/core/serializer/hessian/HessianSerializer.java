@@ -1,8 +1,8 @@
 package com.bgiyj.core.serializer.hessian;
 
+import com.bgiyj.core.serializer.Serializer;
 import com.caucho.hessian.io.Hessian2Input;
 import com.caucho.hessian.io.Hessian2Output;
-import com.serializer.Serializer;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

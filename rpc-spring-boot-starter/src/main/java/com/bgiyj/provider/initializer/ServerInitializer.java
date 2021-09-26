@@ -1,8 +1,8 @@
 package com.bgiyj.provider.initializer;
 
-import com.common.codedc.JSONDecoder;
-import com.common.codedc.JSONEncoder;
-import com.provider.server.handler.ServerHandler;
+import com.bgiyj.core.common.codedc.JSONDecoder;
+import com.bgiyj.core.common.codedc.JSONEncoder;
+import com.bgiyj.provider.handler.ServerHandler;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;

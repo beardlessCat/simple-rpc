@@ -1,9 +1,9 @@
 package com.bgiyj.provider.handler;
 
 import com.alibaba.fastjson.JSON;
-import com.common.entity.RpcRequest;
-import com.common.entity.RpcResponse;
-import com.provider.holder.ServiceHolder;
+import com.bgiyj.core.common.entity.RpcRequest;
+import com.bgiyj.core.common.entity.RpcResponse;
+import com.bgiyj.core.holder.ServiceHolder;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;

@@ -10,8 +10,18 @@ repositories {
 }
 
 dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+    implementation libraries.netty
+    implementation libraries.fastjson
+    implementation libraries.kryo
+    implementation libraries.protostuffCore
+    implementation libraries.protostuffRunTime
+    implementation libraries.hessian
+    implementation libraries.springBootStarterWeb
+    implementation libraries.curator
+    implementation libraries.gson
+    implementation libraries.reflections
+
+
 }
 
 test {

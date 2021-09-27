@@ -8,6 +8,18 @@ version '1.0.0-SNAPSHOT'
 repositories {
     mavenCentral()
 }
+apply plugin: 'maven'
+def localMavenRepo = 'file://' + new File('D:\\workTools\\maven\\repo').absolutePath
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            pom.artifactId = 'rpc-spring-boot-starter'
+            pom.version = '1.0.0-SNAPSHOT'
+            repository(url: localMavenRepo)
+        }
+    }
+}
 
 dependencies {
     implementation libraries.netty

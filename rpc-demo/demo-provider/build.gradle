@@ -6,12 +6,15 @@ group 'com.bigyj'
 version '1.0-SNAPSHOT'
 
 repositories {
+    maven { url 'D:\\workTools\\maven\\repo'}
+    mavenLocal()
     mavenCentral()
 }
 
 dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+    implementation project(':demo-api')
+    implementation libraries.springBootStarterWeb
+    implementation libraries.rpcStarter
 }
 
 test {

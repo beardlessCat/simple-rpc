@@ -15,6 +15,7 @@ dependencies {
     implementation project(':demo-api')
     implementation libraries.springBootStarterWeb
     implementation libraries.rpcStarter
+
 }
 
 test {

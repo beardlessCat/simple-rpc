@@ -1,7 +1,7 @@
 provider:
   port: 9001
-
-
+rpc:
+  role: provider
 ###############
 #ZK服务配置
 ###############

@@ -6,6 +6,7 @@ import com.bgiyj.provider.ProviderServer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
@@ -14,6 +15,7 @@ import java.util.Map;
 
 @Slf4j
 @Component
+@ConditionalOnProperty(prefix = "rpc",name = "role",havingValue = "provider")
 public class RpcProviderRegistrar implements ApplicationContextAware, InitializingBean {
     private ApplicationContext applicationContext ;
     @Override

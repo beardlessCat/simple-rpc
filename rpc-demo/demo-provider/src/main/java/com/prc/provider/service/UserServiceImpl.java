@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 public class UserServiceImpl implements UserService {
     @Override
     public UserDto getUser(String id) {
-        return null;
+        UserDto userDto = new UserDto("小明",10,"男","山东济南！");
+        return userDto;
     }
 }

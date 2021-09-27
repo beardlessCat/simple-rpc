@@ -1,6 +1,9 @@
 server:
   port: 8090
 
+rpc:
+  role: consumer
+
 ###############
 #ZK服务配置
 ###############

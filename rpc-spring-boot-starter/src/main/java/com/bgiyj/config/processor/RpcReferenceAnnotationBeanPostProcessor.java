@@ -3,11 +3,12 @@ package com.bgiyj.config.processor;
 import com.bgiyj.core.common.annotation.RpcReference;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
 import java.lang.reflect.Field;
-
+@ConditionalOnProperty(prefix = "rpc",name = "role",havingValue = "consumer")
 public class RpcReferenceAnnotationBeanPostProcessor implements BeanPostProcessor , ApplicationContextAware {
     private ApplicationContext applicationContext ;
     @Override

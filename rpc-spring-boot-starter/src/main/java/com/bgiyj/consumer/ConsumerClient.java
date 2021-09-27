@@ -13,13 +13,18 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PreDestroy;
 import java.util.List;
 
+/**
+ * netty 服务端启动类
+ */
 @Slf4j
 @Component
+@ConditionalOnProperty(prefix = "rpc",name = "role",havingValue = "consumer")
 public class ConsumerClient {
     private static final ConsumerClient instance = new ConsumerClient() ;
 

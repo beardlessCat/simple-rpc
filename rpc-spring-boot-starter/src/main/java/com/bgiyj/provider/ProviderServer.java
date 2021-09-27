@@ -14,12 +14,16 @@ import io.netty.util.concurrent.GenericFutureListener;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import java.net.InetSocketAddress;
-
+/**
+ * netty 客户端启动类
+ */
 @Slf4j
 @Component
+@ConditionalOnProperty(prefix = "rpc",name = "role",havingValue = "provider")
 public class ProviderServer {
     @Value("${provider.port}")
     private int PORT ;

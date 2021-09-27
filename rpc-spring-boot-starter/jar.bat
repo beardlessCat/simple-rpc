@@ -1,0 +1,1 @@
+mvn install:install-file -Dfile=C:\Users\lyj\IdeaProjects\simple-rpc\rpc-spring-boot-starter\build\libs\rpc-spring-boot-starter-1.0.0-SNAPSHOT.jar -DgroupId=com.bigyj -DartifactId=rpc-spring-boot-starter -Dversion=1.0.0-SNAPSHOT -Dpackaging=jar

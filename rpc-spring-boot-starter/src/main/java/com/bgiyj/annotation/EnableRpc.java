@@ -1,4 +1,4 @@
-package com.bgiyj.core.common.annotation;
+package com.bgiyj.annotation;
 
 import com.bgiyj.config.ClientBeanDefinitionRegistrar;
 import com.bgiyj.config.processor.RpcReferenceAnnotationBeanPostProcessor;

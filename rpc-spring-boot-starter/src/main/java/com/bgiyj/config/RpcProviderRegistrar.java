@@ -1,6 +1,6 @@
 package com.bgiyj.config;
 
-import com.bgiyj.core.common.annotation.RpcService;
+import com.bgiyj.annotation.RpcService;
 import com.bgiyj.core.holder.ServiceHolder;
 import com.bgiyj.provider.ProviderServer;
 import lombok.extern.slf4j.Slf4j;

@@ -1,6 +1,6 @@
 package com.bgiyj.config.processor;
 
-import com.bgiyj.core.common.annotation.RpcReference;
+import com.bgiyj.annotation.RpcReference;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

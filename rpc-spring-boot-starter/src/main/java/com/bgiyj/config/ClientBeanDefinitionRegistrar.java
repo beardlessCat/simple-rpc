@@ -1,7 +1,7 @@
 package com.bgiyj.config;
 
-import com.bgiyj.core.common.annotation.EnableRpc;
-import com.bgiyj.core.common.annotation.RpcReference;
+import com.bgiyj.annotation.EnableRpc;
+import com.bgiyj.annotation.RpcReference;
 import org.reflections.Reflections;
 import org.reflections.scanners.FieldAnnotationsScanner;
 import org.reflections.scanners.SubTypesScanner;

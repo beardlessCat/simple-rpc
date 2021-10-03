@@ -1,4 +1,4 @@
-package com.bgiyj.config;
+package com.bgiyj.config.server;
 
 import com.bgiyj.annotation.RpcService;
 import com.bgiyj.core.holder.ServiceHolder;

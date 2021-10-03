@@ -1,6 +1,6 @@
 package com.bgiyj.annotation;
 
-import com.bgiyj.config.ClientBeanDefinitionRegistrar;
+import com.bgiyj.config.client.ClientBeanDefinitionRegistrar;
 import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.*;

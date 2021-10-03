@@ -1,6 +1,6 @@
 package com.bgiyj.annotation;
 
-import com.bgiyj.config.ClientBeanDefinitionRegistrar;
+import com.bgiyj.config.client.ClientBeanDefinitionRegistrar;
 import com.bgiyj.config.processor.RpcReferenceAnnotationBeanPostProcessor;
 import org.springframework.context.annotation.Import;
 

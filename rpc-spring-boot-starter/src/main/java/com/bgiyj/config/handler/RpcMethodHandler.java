@@ -23,7 +23,7 @@ public class RpcMethodHandler implements MethodHandler {
         RpcResponse result = (RpcResponse) queue.take();
         //fixme 处理接口状态
         Class<?> returnType = method.getReturnType();
-        Object data = result.getData();
+        Object data = result.getResult();
         return JSONObject.parseObject(data.toString(), returnType);
     }
 }

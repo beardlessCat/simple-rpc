@@ -306,15 +306,98 @@ public class RpcReferenceAnnotationBeanPostProcessor implements BeanPostProcesso
 }
 ```
 ### 4.服务注册与发现
+使用zookeeper作为在注册中心，进行服务注册与发现。同时消费者拉取远程服务列表进行本地缓存，减少网络开销，通过zookeeper的事件监听机制进行本地服务列表的更新。
+```java
+private void addWatch(CuratorFramework client) throws Exception {
+    //订阅节点的增加和删除事件
+        PathChildrenCache childrenCache = new PathChildrenCache(client, MANAGE_PATH, true);
+        PathChildrenCacheListener childrenCacheListener = new PathChildrenCacheListener() {
+            @Override
+            public void childEvent(CuratorFramework client,
+                                   PathChildrenCacheEvent event) throws Exception {
+                ChildData data = event.getData();
+                switch (event.getType()) {
+                    case CHILD_ADDED:
+                        logger.info("CHILD_ADDED : " + data.getPath());
+                        processAdd(data);
+                        break;
+                    case CHILD_REMOVED:
+                        logger.info("CHILD_REMOVED : " + data.getPath());
+                        processChange();
+                        break;
+                    case CHILD_UPDATED:
+                        logger.info("CHILD_UPDATED : " + data.getPath());
+                        processChange();
+                        break;
+                    default:
+                        logger.debug("[PathChildrenCache]节点数据为空, path={}", data == null ? "null" : data.getPath());
+                        break;
+                }
+            }
+        };
+        //todo 自定义线程池
+        childrenCache.getListenable().addListener(childrenCacheListener);
+        logger.info("Register zk watcher successfully!");
+        childrenCache.start(PathChildrenCache.StartMode.POST_INITIALIZED_EVENT);
+    }
 
+    /**
+     * 节点删除事件
+     */
+    private void processChange() {
+        RemoteServerHolder.clear();
+        zkService.getServerNodes(MANAGE_PATH, PATH_PREFIX_NO_STRIP);
+    }
+
+    /**
+     * 节点增加事件
+     * @param data
+     */
+    private void processAdd(ChildData data) {
+        long id = NodeUtil.getIdByPath(data.getPath(), PATH_PREFIX);
+        ServerNode serverNode = JSONObject.parseObject(data.getData(), ServerNode.class);
+        serverNode.setId(id);
+        RemoteServerHolder.addRemoteServer(serverNode);
+
+    }
+```
 ### 5.远程调用原理
-
+远程调用通过netty长链接进行通信，客户端启动时从zk获取远程服务节点列表（缓存至本地服务列表地），通过负载均衡策略选择服务端进行连接。
+发起请求后通过组装RpcRequest对象与远程服务进行通讯。服务接收到请求后解析RpcRequest对象，进行本地服务调用，返回RpcResponse对象。
+```java
+ private Object handleRequest(RpcRequest request) throws Exception {
+        String className = request.getClassName();
+        Map<String, Object> serviceMap = ServiceHolder.serviceMap;
+        Object serviceBean = serviceMap.get(className);
+        if (serviceBean!=null){
+            Class<?> serviceClass = serviceBean.getClass();
+            String methodName = request.getMethodName();
+            Class<?>[] parameterTypes = request.getParameterTypes();
+            Object[] parameters = request.getParameters();
+            Method method = serviceClass.getMethod(methodName, parameterTypes);
+            method.setAccessible(true);
+            Object invoke = method.invoke(serviceBean, getParameters(parameterTypes, parameters));
+            return invoke ;
+        }else{
+            throw new Exception("未找到服务接口");
+        }
+    }
+```
 ### 6.异步结果接受处理
+由于netty远程调用是异步处理，无法直接获取相关处理结果
+- 通过SynchronousQueue实现
+```java
+    //执行远程通讯. 等待消息反馈
+    SynchronousQueue<Object> queue = ConnectedHolder.getInstance().send(request);
+    RpcResponse result = (RpcResponse) queue.take();
+    Class<?> returnType = method.getReturnType();
+    Object data = result.getResult();
+```
+- 通过Future实现、
 
+_待完善_
 ## 五、不足与后续规划
 - 服务端增加线程池提高消息处理能力
-
-- 区分provider与consumer
 
 - 通讯流转
 

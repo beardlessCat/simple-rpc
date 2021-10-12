@@ -256,15 +256,17 @@ public class RpcMethodHandler implements MethodHandler {
                 new RpcRequest(method.getDeclaringClass().getName(),method.getName(), method.getParameterTypes(),args, RpcRequest.RequestType.CONTENT)
                 :
                 new RpcRequest(method.getDeclaringClass().getName(),method.getName(), RpcRequest.RequestType.CONTENT);
+
         //执行远程通讯. 等待消息反馈
-        SynchronousQueue<Object> queue = ConnectedHolder.getInstance().send(request);
-        RpcResponse result = (RpcResponse) queue.take();
+        RpcFuture rpcFuture = ConnectedHolder.getInstance().send(request) ;
+        RpcResponse result = (RpcResponse) rpcFuture.get();
         //fixme 处理接口状态
         Class<?> returnType = method.getReturnType();
         Object data = result.getResult();
         return JSONObject.parseObject(data.toString(), returnType);
     }
 }
+
 ```
 **(2)RpcReferenceAnnotationBeanPostProcessor**
 RpcReferenceAnnotationBeanPostProcessor主要是实现依赖注入，类似与@Autowire或@Resource的作用
@@ -393,9 +395,109 @@ private void addWatch(CuratorFramework client) throws Exception {
     Class<?> returnType = method.getReturnType();
     Object data = result.getResult();
 ```
-- 通过Future实现、
+- 通过Future实现
+```java
+public class RpcFuture implements Future<Object> {
+    private RpcRequest rpcRequest ;
+    private RpcResponse response;
+    private long startTime;
+    private long responseTimeThreshold = 1;
+    private ConsumerSynchronizer consumerSynchronizer;
 
-_待完善_
+    public RpcFuture(RpcRequest rpcRequest) {
+        this.rpcRequest = rpcRequest;
+        consumerSynchronizer = new ConsumerSynchronizer();
+        this.startTime = System.currentTimeMillis();
+    }
+
+    @Override
+    public boolean isCancelled() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean cancel(boolean mayInterruptIfRunning) {
+        throw new UnsupportedOperationException();
+    }
+
+
+    @Override
+    public boolean isDone() {
+        return consumerSynchronizer.isDone();
+    }
+
+    @Override
+    public Object get() throws InterruptedException, ExecutionException {
+        consumerSynchronizer.acquire(ConsumerSynchronizer.STATUS_DONE);
+        if (this.response != null) {
+            return this.response;
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public Object get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
+        boolean success = consumerSynchronizer.tryAcquireNanos(1, unit.toNanos(timeout));
+        if (success) {
+            if (this.response != null) {
+                return this.response.getResult();
+            } else {
+                return null;
+            }
+        } else {
+            throw new RuntimeException("Timeout exception. Request id: " + this.rpcRequest.getId()
+                    + ". Request class name: " + this.rpcRequest.getClassName()
+                    + ". Request method: " + this.rpcRequest.getMethodName());
+        }
+    }
+
+    /**
+     * 任务调用完成
+     * @param response
+     */
+    public void done(RpcResponse response) {
+        consumerSynchronizer.release(ConsumerSynchronizer.STATUS_DONE);
+        this.response = response;
+        //计算执行时间
+        long responseTime = System.currentTimeMillis() - startTime;
+        //打印执行时间过长的请求
+        if (responseTime > this.responseTimeThreshold) {
+            logger.warn("Service response time is too slow. Request id = " + response.getRequestId() + ". Response Time = " + responseTime + "ms");
+        }
+    }
+
+    static class ConsumerSynchronizer extends AbstractQueuedSynchronizer {
+        private static final int STATUS_DONE = 1 ;
+        private static final int STATUS_PENDING = 0;
+
+        private static final long serialVersionUID = 1L;
+
+
+        @Override
+        protected boolean tryAcquire(int arg) {
+            return getState() == STATUS_DONE;
+        }
+
+        @Override
+        protected boolean tryRelease(int arg) {
+            if (getState() == STATUS_PENDING) {
+                if (compareAndSetState(STATUS_PENDING, STATUS_DONE)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                return true;
+            }
+        }
+
+        protected boolean isDone() {
+            return getState() == STATUS_DONE;
+        }
+    }
+}
+```
 ## 五、不足与后续规划
 - 服务端增加线程池提高消息处理能力
 

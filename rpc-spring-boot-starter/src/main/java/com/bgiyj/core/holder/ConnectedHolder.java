@@ -1,9 +1,9 @@
 package com.bgiyj.core.holder;
 
+import com.bgiyj.consumer.future.RpcFuture;
+import com.bgiyj.consumer.future.RpcFutureManager;
 import com.bgiyj.core.common.entity.RpcRequest;
 import io.netty.channel.Channel;
-
-import java.util.concurrent.SynchronousQueue;
 
 public class ConnectedHolder {
     private Channel channel ;
@@ -16,10 +16,10 @@ public class ConnectedHolder {
         this.channel = channel ;
     }
 
-    public SynchronousQueue<Object>  send(RpcRequest request){
-        SynchronousQueue<Object> queue = new SynchronousQueue<>();
-        QueueHolder.addQueue(request.getId(), queue);
+    public RpcFuture  send(RpcRequest request){
+        RpcFuture rpcFuture = new RpcFuture(request);
+        RpcFutureManager.instance().addRpcFuture(request.getId(), rpcFuture);
         channel.writeAndFlush(request);
-        return queue;
+        return rpcFuture;
     }
 }

@@ -1,8 +1,9 @@
 package com.bgiyj.consumer.handler;
 
 import com.alibaba.fastjson.JSON;
+import com.bgiyj.consumer.future.RpcFuture;
+import com.bgiyj.consumer.future.RpcFutureManager;
 import com.bgiyj.core.common.entity.RpcResponse;
-import com.bgiyj.core.holder.QueueHolder;
 import com.bgiyj.consumer.ConsumerClient;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
@@ -12,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.net.InetSocketAddress;
-import java.util.concurrent.SynchronousQueue;
 
 @Component
 @ChannelHandler.Sharable
@@ -40,11 +40,15 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg)throws Exception {
         RpcResponse response = JSON.parseObject(msg.toString(), RpcResponse.class);
-        logger.info(response.toString());
         String requestId = response.getRequestId();
-        SynchronousQueue<Object> queue = QueueHolder.getQueue(requestId);
-        queue.put(response);
-        QueueHolder.remove(requestId);
+        logger.debug("Receive response: " + requestId);
+        RpcFuture rpcFuture = RpcFutureManager.instance().getRpcFuture(requestId);
+        if (rpcFuture != null) {
+            RpcFutureManager.instance().removeRpcFuture(requestId);
+            rpcFuture.done(response);
+        } else {
+            logger.warn("Can not get pending response for request id: " + requestId);
+        }
     }
 
     @Override

@@ -1,6 +1,6 @@
 package com.consumer;
 
-import com.bgiyj.core.common.annotation.EnableRpc;
+import com.bgiyj.annotation.EnableRpc;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;

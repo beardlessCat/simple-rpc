@@ -1,6 +1,6 @@
 package com.consumer.cotroller;
 
-import com.bgiyj.core.common.annotation.RpcReference;
+import com.bgiyj.annotation.RpcReference;
 import com.bgiyj.core.common.entity.ServerNode;
 import com.bgiyj.core.holder.RemoteServerHolder;
 import com.rpc.api.UserService;

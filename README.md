@@ -521,4 +521,4 @@ public class RpcFuture implements Future<Object> {
 
 - dubbo源码阅读及参考
 
-- 改造，是有用Future接受远程执行结果
+- 改造，是有用Future接受远程执行结果,进行异步处理

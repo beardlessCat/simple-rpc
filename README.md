@@ -519,6 +519,4 @@ public class RpcFuture implements Future<Object> {
 
 - 如何优雅的区分启动服务是consumer还是provider(客户端与服务端bean注册问题)
 
-- dubbo源码阅读及参考
-
-- 改造，是有用Future接受远程执行结果,进行异步处理
+- dubbo源码阅读及参考 改造，是有用Future接受远程执行结果,进行异步处理
